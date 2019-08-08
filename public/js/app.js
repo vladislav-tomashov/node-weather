@@ -1,6 +1,6 @@
 const getWeather = async address => {
   const response = await fetch(
-    `http://localhost:3000/weather?address=${encodeURIComponent(address)}`
+    `/weather?address=${encodeURIComponent(address)}`
   );
   const data = await response.json();
   if (data.error) {
@@ -17,7 +17,7 @@ const message2 = document.getElementById("message-2");
 weatherForm.addEventListener("submit", async e => {
   e.preventDefault();
   try {
-    message1.textContent = "";
+    message1.textContent = "Loading...";
     message2.textContent = "";
     const address = search.value;
     const response = await getWeather(address);
