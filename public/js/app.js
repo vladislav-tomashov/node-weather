@@ -1,4 +1,4 @@
-const getWeather = async address => {
+const forecast = async address => {
   const response = await fetch(
     `/weather?address=${encodeURIComponent(address)}`
   );
@@ -19,11 +19,8 @@ weatherForm.addEventListener("submit", async e => {
   try {
     message1.textContent = "Loading...";
     message2.textContent = "";
-    const address = search.value;
-    const response = await getWeather(address);
-    console.log(response);
-    const { location, forecast: { summary, temperature } = {} } = response;
-    const weather = `${summary}. It is currently ${temperature} degrees out.`;
+    const response = await forecast(search.value);
+    const { location, weather } = response;
     message1.textContent = location;
     message2.textContent = weather;
   } catch (e) {

@@ -2,8 +2,8 @@ const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
 
-const getGeoData = require("./utils/geo");
-const getWeather = require("./utils/weather");
+const geocode = require("./utils/geocode");
+const forecast = require("./utils/forecast");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -43,15 +43,15 @@ app.get("/weather", async (req, res) => {
   }
 
   try {
-    const { place_name, latitude, longitude } = await getGeoData(address);
-    const forecast = await getWeather({
+    const { place_name, latitude, longitude } = await geocode(address);
+    const { summary, temperature } = await forecast({
       latitude,
       longitude
     });
+    const weather = `${summary}. It is currently ${temperature} degrees out.`;
     res.send({
       location: place_name,
-      forecast,
-      address
+      weather
     });
   } catch (e) {
     return res.send({

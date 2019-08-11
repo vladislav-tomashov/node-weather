@@ -1,7 +1,8 @@
 const rp = require("request-promise");
 
-const getWeather = async ({ longitude, latitude, language }) => {
-  const weatherToken = "e89a6604091e90d4b354515b084e558e";
+const weatherToken = "e89a6604091e90d4b354515b084e558e";
+
+const forecast = async ({ longitude, latitude, language }) => {
   const weatherUrl = `https://api.darksky.net/forecast/${weatherToken}/${longitude},${latitude}`;
 
   const { currently } = await rp({
@@ -20,4 +21,4 @@ const getWeather = async ({ longitude, latitude, language }) => {
   return currently;
 };
 
-module.exports = getWeather;
+module.exports = forecast;

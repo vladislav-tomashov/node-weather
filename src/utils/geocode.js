@@ -1,6 +1,6 @@
 const rp = require("request-promise");
 
-const getGeoData = async (address, { language } = {}) => {
+const geocode = async (address, { language } = {}) => {
   const encodedAddress = encodeURIComponent(address);
   const mapboxToken =
     "pk.eyJ1IjoidmxhZGlzbGF2LXRvbWFzaG92IiwiYSI6ImNqeXh5MHJuYjE0ODYzaG1sNjhsa3h1dmQifQ.jz6_fcarY_AAuZ4LGQFLJA";
@@ -25,4 +25,4 @@ const getGeoData = async (address, { language } = {}) => {
   return { latitude, longitude, place_name };
 };
 
-module.exports = getGeoData;
+module.exports = geocode;
