@@ -2,7 +2,7 @@ const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
 
-const geocode = require("./utils/geocode");
+const { geocode, geoplace } = require("./utils/geocode");
 const forecast = require("./utils/forecast");
 
 const app = express();
@@ -34,11 +34,41 @@ app.get("/help", (req, res) => {
   });
 });
 
+app.get("/weatherbylocation", async (req, res) => {
+  const { longitude, latitude } = req.query;
+  if (!longitude || !latitude) {
+    return res.send({
+      error: "You must provide longitude and latitude"
+    });
+  }
+
+  try {
+    const { place_name } = await geoplace({
+      latitude,
+      longitude
+    });
+    const forecastResult = await forecast({
+      latitude,
+      longitude
+    });
+    const { summary, temperature } = forecastResult;
+    const weather = `${summary}. It is currently ${temperature} degrees out.`;
+    res.send({
+      location: place_name,
+      weather
+    });
+  } catch (e) {
+    return res.send({
+      error: e.message
+    });
+  }
+});
+
 app.get("/weather", async (req, res) => {
   const { address } = req.query;
   if (!address) {
     return res.send({
-      error: "You must provide an adress"
+      error: "You must provide an address"
     });
   }
 

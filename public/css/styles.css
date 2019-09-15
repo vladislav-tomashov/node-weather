@@ -53,3 +53,23 @@ button {
   background: #888888;
   padding: 8px;
 }
+
+.compose {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.compose form {
+  display: flex;
+  flex-grow: 1;
+  margin-right: 16px;
+  margin-bottom: 0;
+}
+
+.compose input {
+  border: 1px solid #eeeeee;
+  width: 100%;
+  padding: 12px;
+  margin: 0 16px 0 0;
+  flex-grow: 1;
+}
