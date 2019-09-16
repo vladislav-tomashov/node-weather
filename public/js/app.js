@@ -22,45 +22,51 @@ const forecastByLocation = async ({ longitude, latitude }) => {
   return data;
 };
 
-const weatherForm = document.querySelector("form");
-const search = document.querySelector("input");
-const $getWeatherByCurrentLocationButton = document.querySelector(
-  "#current-location"
-);
-const message1 = document.getElementById("message-1");
-const message2 = document.getElementById("message-2");
+const $weatherForm = document.querySelector("form");
+const $address = document.querySelector("input");
+const $currentLocationButton = document.querySelector("#current-location");
+const $submitButton = $weatherForm.querySelector("button");
+const $message1 = document.getElementById("message-1");
+const $message2 = document.getElementById("message-2");
 
-$getWeatherByCurrentLocationButton.addEventListener("click", async e => {
+$currentLocationButton.addEventListener("click", async e => {
   if (!navigator.geolocation) {
     return alert("Geolocation is not supported by your browser");
   }
   navigator.geolocation.getCurrentPosition(async function(position) {
     try {
-      $getWeatherByCurrentLocationButton.setAttribute("disabled", "disabled");
-      message1.textContent = "Loading...";
-      message2.textContent = "";
+      $currentLocationButton.setAttribute("disabled", "disabled");
+      $submitButton.setAttribute("disabled", "disabled");
+      $message1.textContent = "Loading...";
+      $message2.textContent = "";
       const { longitude, latitude } = position.coords;
       const response = await forecastByLocation({ longitude, latitude });
       const { location, weather } = response;
-      $getWeatherByCurrentLocationButton.removeAttribute("disabled");
-      message1.textContent = location;
-      message2.textContent = weather;
+      $message1.textContent = location;
+      $message2.textContent = weather;
     } catch (e) {
-      message1.textContent = e.message;
+      $message1.textContent = e.message;
+    } finally {
+      $currentLocationButton.removeAttribute("disabled");
+      $submitButton.removeAttribute("disabled");
     }
   });
 });
 
-weatherForm.addEventListener("submit", async e => {
+$weatherForm.addEventListener("submit", async e => {
   e.preventDefault();
   try {
-    message1.textContent = "Loading...";
-    message2.textContent = "";
-    const response = await forecastByAddress(search.value);
+    $submitButton.setAttribute("disabled", "disabled");
+    $message1.textContent = "Loading...";
+    $message2.textContent = "";
+    const response = await forecastByAddress($address.value);
     const { location, weather } = response;
-    message1.textContent = location;
-    message2.textContent = weather;
+    $message1.textContent = location;
+    $message2.textContent = weather;
   } catch (e) {
-    message1.textContent = e.message;
+    $message1.textContent = e.message;
+  } finally {
+    $currentLocationButton.removeAttribute("disabled");
+    $submitButton.removeAttribute("disabled");
   }
 });
